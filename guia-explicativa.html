@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía explicativa — Ángel de Hielo</title>
+  <style>
+    body { font-family: "Segoe UI", Verdana, Arial, sans-serif; color:#ece6f7; background:#150a24; line-height:1.6; margin:0; }
+    .contenedor { width:88%; max-width:800px; margin:0 auto; padding:3% 0; }
+    h1 { color:#7fe3ff; }
+    h2 { color:#7fe3ff; border-bottom:2px solid #ff5da2; padding-bottom:0.2em; }
+    code { background:#2a1a45; color:#ece6f7; padding:0.1em 0.4em; border-radius:4px; }
+    table { width:100%; border-collapse:collapse; margin:1em 0; }
+    th, td { border:1px solid #2a1a45; padding:0.5em; text-align:left; }
+    th { background:#0a0516; color:#7fe3ff; }
+    tr:nth-child(even) { background:#1f1236; }
+  </style>
+</head>
+<body>
+<div class="contenedor">
+
+  <h1>Guía explicativa</h1>
+  <p>Portal: <strong>Ángel de Hielo</strong> — Desafío Práctico: Programación Web I</p>
+  <p>Fuente curada: episodio de análisis sobre la Ruta Snowgrave en Deltarune (procesado con NotebookLM).</p>
+
+  <h2>1. Justificación de las etiquetas semánticas</h2>
+  <p>
+    La página evita el uso de <code>&lt;div&gt;</code> genéricos siempre que existe
+    una etiqueta semántica equivalente, para que la estructura del documento
+    sea comprensible tanto para el navegador como para tecnologías de
+    asistencia y motores de búsqueda.
+  </p>
+  <table>
+    <tr><th>Etiqueta</th><th>Uso en el proyecto</th><th>Justificación</th></tr>
+    <tr><td><code>&lt;header&gt;</code></td><td>Título del portal y subtítulo</td><td>Agrupa el contenido introductorio, distinto del contenido principal.</td></tr>
+    <tr><td><code>&lt;nav&gt;</code></td><td>Menú de anclas a las siete secciones</td><td>Marca explícitamente el bloque de navegación, permitiendo a lectores de pantalla saltar directamente a él.</td></tr>
+    <tr><td><code>&lt;main&gt;</code></td><td>Contenedor único del contenido central</td><td>Señala el contenido principal y único de la página (solo puede existir un <code>&lt;main&gt;</code> por documento).</td></tr>
+    <tr><td><code>&lt;section&gt;</code></td><td>Episodio, Resumen, Psicología, Vínculo, Profecía, Consecuencias</td><td>Cada una agrupa un bloque temático independiente con su propio encabezado.</td></tr>
+    <tr><td><code>&lt;article&gt;</code></td><td>Bloques de Resumen, Psicología y Vínculo</td><td>Contenido que tiene sentido de forma independiente y podría republicarse por sí solo.</td></tr>
+    <tr><td><code>&lt;aside&gt;</code></td><td>Cita/conclusiones, reacción de congelamiento, intervención del jugador</td><td>Información relacionada pero secundaria respecto al contenido principal de la columna.</td></tr>
+    <tr><td><code>&lt;figure&gt;</code> / <code>&lt;figcaption&gt;</code></td><td>Galería de consecuencias en el mundo de la luz</td><td>Vincula cada ilustración con su descripción de forma semánticamente explícita.</td></tr>
+    <tr><td><code>&lt;table&gt;</code>, <code>&lt;caption&gt;</code>, <code>&lt;thead&gt;</code>, <code>&lt;th scope="col"&gt;</code></td><td>Tabla de entidades y su rol en la profecía</td><td>Los datos entidad/rol son tabulares por naturaleza; <code>scope</code> asocia cada celda con su encabezado para lectores de pantalla.</td></tr>
+    <tr><td><code>&lt;footer&gt;</code></td><td>Créditos del proyecto</td><td>Agrupa metadatos de cierre del documento.</td></tr>
+  </table>
+
+  <h2>2. Estrategia matemática/CSS para la fluidez sin Media Queries ni Flexbox/Grid</h2>
+
+  <h3>2.1 Contenedor fluido</h3>
+  <p>
+    En lugar de un ancho fijo en píxeles, el contenedor principal usa
+    <code>width: 92%</code> con <code>margin: 0 auto</code>. El ancho del
+    contenido es siempre una fracción proporcional del ancho de la ventana,
+    sin necesidad de puntos de quiebre.
+  </p>
+
+  <h3>2.2 Video responsivo (relación de aspecto por porcentaje)</h3>
+  <p>
+    El embebido de YouTube se envuelve en un contenedor con posición relativa
+    y <code>padding-bottom: 56.25%</code>, que corresponde a la proporción
+    9&nbsp;/&nbsp;16 (0.5625) de una relación de aspecto 16:9. Como el
+    <code>padding</code> en porcentaje se calcula sobre el ancho del
+    elemento, la altura queda matemáticamente ligada al ancho, manteniendo
+    la proporción sin ninguna regla <code>@media</code>.
+  </p>
+
+  <h3>2.3 Menú de navegación con <code>inline-block</code></h3>
+  <p>
+    Los siete <code>&lt;li&gt;</code> del menú usan
+    <code>display: inline-block</code> con <code>width: 14%</code> cada uno
+    (7&nbsp;×&nbsp;14%&nbsp;=&nbsp;98%, dejando margen para el espaciado
+    entre elementos en línea). A diferencia de <code>float</code>,
+    <code>inline-block</code> respeta el flujo del texto y permite que los
+    enlaces se acomoden de forma natural si el espacio disponible es
+    reducido, sin flexbox ni puntos de quiebre.
+  </p>
+
+  <h3>2.4 Columnas con <code>float</code> y <code>clearfix</code></h3>
+  <p>
+    Los bloques de <strong>Resumen</strong>, <strong>Psicología</strong> y
+    <strong>Vínculo</strong> reutilizan la clase <code>.columnas</code>: una
+    columna principal de <code>66%</code> y una lateral de <code>34%</code>,
+    ambas con <code>float: left</code>, que suman aproximadamente el 100%
+    del contenedor. Como los elementos flotados no aportan altura a su
+    padre, se aplica <code>.clearfix</code>
+    (<code>content: ""; display: table; clear: both;</code>) al
+    <code>&lt;article&gt;</code> contenedor para forzarlo a contener la
+    altura de sus hijos flotados.
+  </p>
+
+  <h3>2.5 Tabla de entidades fluida</h3>
+  <p>
+    La tabla de la sección Profecía usa <code>width: 100%</code> sobre el
+    contenedor fluido, de modo que las dos columnas (Entidad / Rol) se
+    reparten proporcionalmente al ancho disponible. El padding de celdas
+    también se define en porcentaje (<code>2% 2.5%</code>) para que el
+    espaciado interno escale junto con el ancho de la tabla.
+  </p>
+
+  <h3>2.6 Galería con <code>inline-block</code> proporcional</h3>
+  <p>
+    Cada <code>&lt;figure&gt;</code> de la sección de consecuencias mide
+    <code>width: 30%</code> con <code>margin: 1.5%</code>, de modo que tres
+    figuras más sus márgenes ocupan aproximadamente el 100% del ancho
+    disponible (30%&nbsp;×&nbsp;3&nbsp;+&nbsp;1.5%&nbsp;×&nbsp;6&nbsp;=&nbsp;99%).
+    Al ser unidades porcentuales, las ilustraciones se reducen o amplían de
+    forma continua según el ancho de la pantalla, y
+    <code>max-width: 100%</code> en las imágenes evita que desborden su
+    figura contenedora.
+  </p>
+
+  <h3>2.7 Resumen de la estrategia</h3>
+  <p>
+    En conjunto, la fluidez se logra combinando cuatro recursos puramente
+    porcentuales: anchos relativos (%) para contenedores, columnas y tabla;
+    <code>inline-block</code> para elementos que deben acomodarse en línea
+    (menú y galería); <code>float</code> con <code>clearfix</code> para las
+    maquetaciones de dos columnas; y <code>max-width: 100%</code> para que
+    ningún elemento multimedia desborde su contenedor. Ninguna técnica
+    depende del ancho de la ventana en píxeles absolutos ni de un punto de
+    quiebre definido con <code>@media</code>.
+  </p>
+
+  <h2>3. Diseño temático y paleta de colores</h2>
+  <p>
+    A diferencia de una paleta genérica, esta se diseñó a partir de la
+    estética del propio video: el violeta casi negro (<code>#150a24</code>)
+    evoca el &ldquo;Mundo Oscuro&rdquo; de Deltarune; el cian helado
+    (<code>#7fe3ff</code>) representa la magia de hielo y el Freeze Ring, y
+    se usa en títulos, enlaces y bordes; el magenta &ldquo;glitch&rdquo;
+    (<code>#ff5da2</code>) remite al Capítulo 2 (Mundo Cibernético) y al
+    trance inducido por el Anillo de Espinas, por lo que se reserva para
+    citas y acentos puntuales.
+  </p>
+  <p>
+    El contraste entre el fondo oscuro <code>#150a24</code> y el texto claro
+    <code>#ece6f7</code> es de aproximadamente 13:1, muy por encima del
+    mínimo de 4.5:1 exigido por WCAG 2.1 nivel AA para texto normal. El cian
+    helado sobre el mismo fondo alcanza un contraste cercano a 10:1, y el
+    magenta se limita a bordes, citas cortas y acentos decorativos para no
+    comprometer la legibilidad en bloques extensos de texto.
+  </p>
+
+</div>
+</body>
+</html>
