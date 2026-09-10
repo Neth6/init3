@@ -1,0 +1,15 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t2 d2">
+  <title id="t2">La prueba del reloj</title>
+  <desc id="d2">Ilustración de un reloj de bolsillo con esfera helada y una grieta que lo atraviesa</desc>
+  <rect width="400" height="300" fill="#150a24"/>
+  <circle cx="200" cy="160" r="80" fill="#2a1a45" stroke="#7fe3ff" stroke-width="6"/>
+  <circle cx="200" cy="160" r="62" fill="#150a24" stroke="#7fe3ff" stroke-width="2"/>
+  <rect x="188" y="66" width="24" height="20" rx="4" fill="#2a1a45" stroke="#7fe3ff" stroke-width="4"/>
+  <line x1="200" y1="66" x2="200" y2="50" stroke="#7fe3ff" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#ece6f7" stroke-width="4" stroke-linecap="round">
+    <line x1="200" y1="160" x2="200" y2="118"/>
+    <line x1="200" y1="160" x2="232" y2="172"/>
+  </g>
+  <circle cx="200" cy="160" r="5" fill="#ff5da2"/>
+  <path d="M150 110 L220 150 L170 170 L235 220" fill="none" stroke="#ff5da2" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

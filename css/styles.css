@@ -1,0 +1,283 @@
+/* ==========================================================================
+   PORTAL WEB MULTIMEDIA — VIDEO3 (Ruta Snowgrave, Deltarune)
+   Diseño temático: Mundo Oscuro helado + estética "glitch" del Capítulo 2.
+   Maquetación fluida tradicional: solo % , inline-block, float + clearfix
+   y max-width:100%. Sin display:flex, display:grid, @media ni JavaScript.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. VARIABLES DE COLOR Y BASE
+   Paleta inspirada en el Mundo Oscuro de Deltarune: violeta casi negro de
+   fondo, cian helado como acento principal (magia de hielo / Freeze Ring) y
+   magenta "glitch" como color de alerta (virus del Capítulo 2, trance).
+   Contraste validado en la guía explicativa.
+   -------------------------------------------------------------------------- */
+:root {
+  --color-fondo: #150a24;        /* violeta casi negro: fondo general (Mundo Oscuro) */
+  --color-fondo-alt: #1f1236;    /* alterna, un poco más clara, para secciones pares */
+  --color-superficie: #2a1a45;   /* paneles, columna lateral, figuras */
+  --color-cabecera: #0a0516;     /* casi negro puro: cabecera, pie, tabla */
+  --color-hielo: #7fe3ff;        /* cian helado: títulos, enlaces, bordes principales */
+  --color-glitch: #ff5da2;       /* magenta glitch: alertas, citas, énfasis puntual */
+  --color-texto: #ece6f7;        /* texto claro sobre fondo oscuro */
+  --color-texto-secundario: #bdb0d6; /* texto secundario / subtítulos */
+}
+
+/* Base: todo el documento hereda box-sizing para que anchos en % + padding
+   nunca desborden el contenedor padre (clave en maquetación fluida). */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* font-size base en % para que toda la escala tipográfica en em/rem
+     responda si el usuario cambia el tamaño de fuente del navegador */
+  font-size: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Verdana, Arial, Helvetica, sans-serif;
+  color: var(--color-texto);
+  background-color: var(--color-fondo);
+  line-height: 1.6;
+}
+
+/* Contenedor fluido: ancho relativo, nunca fijo en píxeles, para que la
+   página se adapte de forma proporcional y continua a cualquier pantalla. */
+.contenedor {
+  width: 92%;
+  margin: 0 auto;
+}
+
+/* Clearfix clásico: necesario porque los elementos flotados no aportan
+   altura a su contenedor. Alternativa 100% CSS a flexbox/grid. */
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+img, iframe {
+  max-width: 100%; /* nunca desbordan su contenedor, clave de la fluidez */
+  height: auto;
+  border: 0;
+}
+
+a {
+  color: var(--color-hielo);
+}
+
+a:hover, a:focus {
+  color: var(--color-glitch);
+}
+
+/* --------------------------------------------------------------------------
+   2. ESCALA TIPOGRÁFICA
+   Jerarquía clara usando unidades relativas (em) para mantener proporción.
+   -------------------------------------------------------------------------- */
+h1 { font-size: 2.4em; margin: 0.3em 0; }
+h2 { font-size: 1.8em; margin: 0.6em 0 0.4em; color: var(--color-hielo); }
+h3 { font-size: 1.3em; margin: 0.5em 0 0.3em; color: var(--color-glitch); }
+p, li { font-size: 1em; }
+small { font-size: 0.85em; color: var(--color-texto-secundario); }
+
+/* --------------------------------------------------------------------------
+   3. ENCABEZADO Y NAVEGACIÓN
+   -------------------------------------------------------------------------- */
+header.principal {
+  background-color: var(--color-cabecera);
+  color: var(--color-texto);
+  padding: 3% 0;
+  text-align: center;
+  border-bottom: 3px solid var(--color-hielo);
+}
+
+header.principal h1 {
+  color: var(--color-hielo);
+  letter-spacing: 0.03em;
+}
+
+header.principal p.subtitulo {
+  margin: 0;
+  font-size: 1.05em;
+  color: var(--color-texto-secundario);
+}
+
+/* Navegación fluida sin flexbox ni grid: inline-block permite que los
+   elementos se acomoden en una sola línea y, si el ancho disponible es muy
+   reducido, se ajusten de forma natural sin reglas @media. */
+nav.principal {
+  background-color: var(--color-superficie);
+}
+
+nav.principal ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+nav.principal li {
+  display: inline-block;
+  width: 14%;          /* 7 enlaces * 14% + espacio = reparto proporcional */
+  max-width: 150px;
+  vertical-align: top;
+}
+
+nav.principal a {
+  display: block;
+  padding: 4% 2%;
+  color: var(--color-texto);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9em;
+  border-right: 1px solid rgba(127, 227, 255, 0.25);
+}
+
+nav.principal li:last-child a {
+  border-right: none;
+}
+
+nav.principal a:hover,
+nav.principal a:focus {
+  background-color: var(--color-cabecera);
+  color: var(--color-hielo);
+}
+
+/* --------------------------------------------------------------------------
+   4. SECCIONES GENERALES
+   -------------------------------------------------------------------------- */
+main section {
+  padding: 3% 0;
+}
+
+main section:nth-of-type(even) {
+  background-color: var(--color-fondo-alt);
+}
+
+/* --------------------------------------------------------------------------
+   5. VIDEO EMBEBIDO — RESPONSIVE FLUIDO SIN MEDIA QUERIES
+   Técnica clásica: un contenedor con padding-bottom en % (relación 16:9)
+   fuerza una altura proporcional al ancho disponible, sin @media ni JS.
+   -------------------------------------------------------------------------- */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 9 / 16 = 0.5625 → proporción 16:9 */
+  height: 0;
+  overflow: hidden;
+  background-color: #000;
+  margin-bottom: 1.5em;
+  border: 2px solid var(--color-hielo);
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   6. ARTÍCULOS DE DOS COLUMNAS CON FLOAT + CLEARFIX
+   Se reutiliza en "Resumen", "Psicología" y "Vínculo".
+   -------------------------------------------------------------------------- */
+.columnas .col-principal {
+  float: left;
+  width: 66%;
+  padding-right: 3%;
+}
+
+.columnas .col-lateral {
+  float: left;
+  width: 34%;
+  background-color: var(--color-superficie);
+  border-left: 4px solid var(--color-glitch);
+  padding: 2% 3%;
+}
+
+blockquote {
+  font-style: italic;
+  border-left: 4px solid var(--color-glitch);
+  margin: 1em 0;
+  padding: 0.5em 1em;
+  background-color: var(--color-fondo);
+  color: var(--color-hielo);
+}
+
+/* --------------------------------------------------------------------------
+   7. TABLA — ENTIDADES Y LA PROFECÍA
+   Ancho fluido al 100% del contenedor; nada de layout con grid.
+   -------------------------------------------------------------------------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5em;
+}
+
+caption {
+  text-align: left;
+  font-style: italic;
+  margin-bottom: 0.5em;
+  color: var(--color-texto-secundario);
+}
+
+th, td {
+  border: 1px solid var(--color-superficie);
+  padding: 2% 2.5%;
+  text-align: left;
+  vertical-align: top;
+}
+
+thead th {
+  background-color: var(--color-cabecera);
+  color: var(--color-hielo);
+}
+
+tbody tr:nth-child(even) {
+  background-color: var(--color-fondo-alt);
+}
+
+tbody tr:nth-child(odd) {
+  background-color: var(--color-superficie);
+}
+
+/* --------------------------------------------------------------------------
+   8. GALERÍA DE IMÁGENES — INLINE-BLOCK FLUIDO (3 COLUMNAS PROPORCIONALES)
+   -------------------------------------------------------------------------- */
+.galeria {
+  text-align: center;
+}
+
+.galeria figure {
+  display: inline-block;
+  vertical-align: top;
+  width: 30%;
+  margin: 1.5%;
+  background-color: var(--color-superficie);
+  padding: 1.5%;
+  border: 1px solid var(--color-hielo);
+}
+
+.galeria figcaption {
+  font-size: 0.9em;
+  margin-top: 0.5em;
+  color: var(--color-hielo);
+}
+
+/* --------------------------------------------------------------------------
+   9. PIE DE PÁGINA
+   -------------------------------------------------------------------------- */
+footer.principal {
+  background-color: var(--color-cabecera);
+  color: var(--color-texto);
+  text-align: center;
+  padding: 2% 0;
+  border-top: 3px solid var(--color-hielo);
+}
+
+footer.principal a {
+  color: var(--color-texto-secundario);
+}
